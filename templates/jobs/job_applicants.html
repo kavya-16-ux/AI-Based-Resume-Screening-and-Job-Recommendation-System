@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Applicants</h2>
+        <p class="text-muted mb-0">
+            Ranked candidates for <strong>{{ job.title }}</strong>
+        </p>
+    </div>
+
+    <a href="{% url 'recruiter-dashboard' %}" class="btn btn-outline-secondary">
+        Back to Dashboard
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Candidate Ranking</h5>
+    </div>
+
+    <div class="card-body">
+        {% if ranked_applications %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Candidate</th>
+                            <th>Match Score</th>
+                            <th>Missing Skills</th>
+                            <th>Applied At</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in ranked_applications %}
+                            <tr>
+                                <td>
+                                    <span class="badge bg-dark">
+                                        #{{ item.rank }}
+                                    </span>
+                                </td>
+
+                                <td class="fw-semibold">
+                                    {{ item.application.user.username }}
+                                </td>
+
+                                <td>
+                                    {% if item.application.match_score >= 75 %}
+                                        <span class="badge bg-success">
+                                            {{ item.application.match_score|floatformat:1 }}%
+                                        </span>
+                                    {% elif item.application.match_score >= 50 %}
+                                        <span class="badge bg-warning text-dark">
+                                            {{ item.application.match_score|floatformat:1 }}%
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">
+                                            {{ item.application.match_score|floatformat:1 }}%
+                                        </span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if item.application.missing_skills %}
+                                        {% for skill in item.application.missing_skills %}
+                                            <span class="badge bg-light text-dark border">
+                                                {{ skill }}
+                                            </span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">No major missing skills</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ item.application.applied_at|date:"M d, Y H:i" }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <h5>No applicants yet</h5>
+                <p class="text-muted">
+                    Candidates who apply to this job will appear here.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

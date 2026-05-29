@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h4 class="mb-0">{{ title }}</h4>
+            </div>
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Job Title</label>
+                        {{ form.title }}
+                        {{ form.title.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Company</label>
+                        {{ form.company }}
+                        {{ form.company.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        {{ form.location }}
+                        {{ form.location.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                        {{ form.description.errors }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Required Skills</label>
+                        {{ form.skills_text }}
+                        <div class="form-text">
+                            Separate skills with commas.
+                        </div>
+                        {{ form.skills_text.errors }}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'recruiter-dashboard' %}" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+
+                        <button type="submit" class="btn btn-primary">
+                            {{ button_text }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

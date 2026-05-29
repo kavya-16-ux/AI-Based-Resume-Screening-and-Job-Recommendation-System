@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow-lg border-0 overflow-hidden">
+                
+                <div class="card-header {% if interview.total_score >= 70 %}bg-success{% else %}bg-dark{% endif %} text-white py-5 text-center">
+                    <div class="mb-2">
+                        <i class="fas {% if interview.total_score >= 70 %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} fa-3x"></i>
+                    </div>
+                    <h2 class="fw-bold mb-1">Assessment Score: {{ interview.total_score }}%</h2>
+                    <p class="mb-0 opacity-75">Semantic Analysis powered by Sentence-BERT NLP Models</p>
+                </div>
+
+                <div class="card-body p-4 p-lg-5">
+                    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                        <h4 class="fw-bold text-secondary mb-0">Detailed Skill Breakdown</h4>
+                        <span class="badge rounded-pill bg-light text-dark border p-2">
+                            <i class="fas fa-tags me-1 text-primary"></i> Topic: {{ interview.missing_skills }}
+                        </span>
+                    </div>
+
+                    {% for q in questions %}
+                    <div class="mb-4 p-4 border-start border-4 {% if q.score >= 70 %}border-success{% elif q.score >= 40 %}border-warning{% else %}border-danger{% endif %} bg-white shadow-sm rounded">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="fw-bold text-dark pe-3">{{ forloop.counter }}. {{ q.question }}</h6>
+                            <span class="badge {% if q.score >= 70 %}bg-success{% elif q.score >= 40 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                                {{ q.score }}%
+                            </span>
+                        </div>
+                        
+                        <div class="bg-light p-3 rounded mb-3">
+                            <p class="small text-muted mb-1"><strong>Your Response:</strong></p>
+                            <p class="mb-0 text-dark font-italic">"{{ q.candidate_answer|default:'No answer provided.' }}"</p>
+                        </div>
+
+                        <div class="d-flex align-items-center">
+                            <div class="progress flex-grow-1" style="height: 8px; border-radius: 10px; background-color: #eee;">
+                                <div class="progress-bar result-progress-bar {% if q.score >= 70 %}bg-success{% elif q.score >= 40 %}bg-warning{% else %}bg-danger{% endif %}"
+                                     role="progressbar" 
+                                     data-score="{{ q.score|default:0 }}"
+                                     style="width: 0%; transition: width 1s ease-in-out;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-database fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No assessment data found for this session.</p>
+                    </div>
+                    {% endfor %}
+
+                    <div class="text-center mt-5 pt-4 border-top">
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-md-4">
+                                <a href="{% url 'candidate-dashboard' %}" class="btn btn-outline-dark w-100 py-2">
+                                    <i class="fas fa-th-large me-2"></i>Dashboard
+                                </a>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                {% if interview.total_score >= 70 %}
+                                    <a href="{% url 'download-certificate' interview.id %}" class="btn btn-primary w-100 py-2 shadow pulse-animation">
+                                        <i class="fas fa-award me-2"></i>Claim AI Certificate
+                                    </a>
+                                {% else %}
+                                    <button class="btn btn-secondary w-100 py-2" disabled title="Score 70%+ to unlock">
+                                        <i class="fas fa-lock me-2"></i>Certificate Locked (Min 70%)
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <button onclick="window.print()" class="btn btn-link text-muted mt-3 d-print-none">
+                            <i class="fas fa-print me-1"></i>Print Assessment Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const bars = document.querySelectorAll(".result-progress-bar");
+        // Delay ensures animation triggers after page load
+        setTimeout(() => {
+            bars.forEach(bar => {
+                const finalWidth = bar.getAttribute("data-score");
+                bar.style.width = finalWidth + "%";
+            });
+        }, 300);
+    });
+</script>
+
+<style>
+    /* Pulse effect for the certificate button when unlocked */
+    .pulse-animation {
+        animation: pulse-ring 2.5s infinite;
+    }
+    @keyframes pulse-ring {
+        0% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(13, 110, 253, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+    }
+    
+    .font-italic { font-style: italic; }
+
+    /* Print settings for a professional look */
+    @media print {
+        .btn, .navbar, .d-print-none { display: none !important; }
+        .card { border: 1px solid #ddd !important; box-shadow: none !important; }
+        .card-header { 
+            background-color: #198754 !important; 
+            color: white !important; 
+            -webkit-print-color-adjust: exact; 
+            print-color-adjust: exact;
+        }
+    }
+</style>
+{% endblock %}

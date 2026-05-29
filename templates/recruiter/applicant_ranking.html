@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Applicant Ranking</h2>
+            <p class="text-muted">Job: <span class="text-primary fw-bold">{{ job.title }}</span></p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-dark px-3 py-2 mb-2">{{ applicants.count }} Total Applicants</span>
+            <br>
+            <a href="{% url 'recruiter-dashboard' %}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr class="text-uppercase small fw-bold text-muted">
+                            <th class="ps-4 py-3">Rank</th>
+                            <th>Candidate</th>
+                            <th>Match Score</th>
+                            <th>Missing Skills</th>
+                            <th>Applied At</th>
+                            <th class="text-center pe-4">Decision</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in applicants %}
+                        <tr>
+                            <td class="ps-4">
+                                {% if forloop.counter == 1 %}
+                                    <span class="badge bg-warning text-dark shadow-sm">
+                                        <i class="fas fa-crown"></i> Top Match
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-dark rounded-pill">#{{ forloop.counter }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <div class="fw-bold text-dark">{{ app.user.username }}</div>
+                                <div class="small text-muted">{{ app.user.email }}</div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <span class="fw-bold me-2">{{ app.match_score }}%</span>
+                                    <div class="progress w-50" style="height: 8px; background-color: #e9ecef;">
+                                        <div class="progress-bar js-progress-bar {% if app.match_score > 75 %}bg-success{% elif app.match_score > 45 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             role="progressbar" 
+                                             data-width="{{ app.match_score|default:0 }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                {% if app.missing_skills %}
+                                    <div class="d-flex flex-wrap gap-1">
+                                    {% for skill in app.missing_skills|slice:":3" %}
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle small" style="font-size: 0.7rem;">
+                                            {{ skill }}
+                                        </span>
+                                    {% endfor %}
+                                    {% if app.missing_skills|length > 3 %}
+                                        <span class="text-muted small" style="font-size: 0.7rem;">+{{ app.missing_skills|length|add:"-3" }} more</span>
+                                    {% endif %}
+                                    </div>
+                                {% else %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle small">
+                                        <i class="fas fa-check-circle me-1"></i> Perfect Fit
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td class="small text-muted">
+                                {{ app.applied_at|date:"M d, Y" }}
+                            </td>
+
+                            <td class="text-end pe-4">
+                                {% if app.status == 'PENDING' %}
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{% url 'update_status' app.id 'ACCEPTED' %}" 
+                                           class="btn btn-sm btn-success px-3 shadow-sm fw-bold">
+                                            ACCEPT
+                                        </a>
+                                        <a href="{% url 'update_status' app.id 'REJECTED' %}" 
+                                           class="btn btn-sm btn-outline-danger px-3 fw-bold">
+                                            REJECT
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center">
+                                        <span class="badge {% if app.status == 'ACCEPTED' %}bg-success{% else %}bg-danger{% endif %} text-uppercase px-3 py-2 shadow-sm" style="letter-spacing: 1px;">
+                                            {{ app.status }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-users-slash fa-2x mb-3 opacity-25"></i>
+                                <p class="mb-0">No applications found for this position yet.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s ease-in-out;
+    }
+    .progress {
+        border-radius: 10px;
+    }
+    .progress-bar {
+        border-radius: 10px;
+        transition: width 1s ease-in-out; /* Animates the bar on load */
+    }
+    .badge {
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bars = document.querySelectorAll('.js-progress-bar');
+        bars.forEach(bar => {
+            const width = bar.getAttribute('data-width');
+            bar.style.width = width + '%';
+        });
+    });
+</script>
+{% endblock %}
