@@ -107,40 +107,6 @@ DATA TIER
 7. Candidate Ranking
 8. Job Recommendation
 
-
----
-
-# 📸 Screenshots
-
-## Register Page
-
-![Register Page]
-
-## Login Page
-
-![Login Page]
-
-## Candidate Dashboard
-
-![Candidate Dashboard]
-
-## AI Job Matches
-
-![Job Matches]
-
-## Recruiter Dashboard
-
-![Recruiter Dashboard]
-
-## Create Job
-
-![Create Job]
-
-## Applicant Ranking
-
-![Applicant Ranking]
-
-
 ---
 
 # ⚙️ Installation
