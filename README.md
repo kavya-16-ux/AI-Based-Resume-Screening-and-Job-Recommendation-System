@@ -1,4 +1,4 @@
-<img width="438" height="545" alt="register" src="https://github.com/user-attachments/assets/b9f9a1d9-a843-404f-acee-8bbc6e5daacb" /># 🤖 AI-Based Resume Screening & Job Recommendation System
+# 🤖 AI-Based Resume Screening & Job Recommendation System
 An intelligent recruitment platform that automates resume screening, candidate ranking, and job recommendations using Sentence-BERT and Cosine Similarity.
 
 ---
