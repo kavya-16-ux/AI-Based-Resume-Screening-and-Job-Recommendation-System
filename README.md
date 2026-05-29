@@ -114,7 +114,7 @@ DATA TIER
 
 ## Register Page
 
-![Register Page](Screenshots/register.png)
+![Register Page](screenshots/register.png)
 
 ## Login Page
 
