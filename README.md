@@ -114,31 +114,31 @@ DATA TIER
 
 ## Register Page
 
-![Register Page](screenshots/register.png)
+![Register Page](Screenshots/register.png)
 
 ## Login Page
 
-![Login Page](screenshots/login.png)
+![Login Page](Screenshots/login.png)
 
 ## Candidate Dashboard
 
-![Candidate Dashboard](screenshots/candidate_dashboard.png)
+![Candidate Dashboard](Screenshots/candidate_dashboard.png)
 
 ## AI Job Matches
 
-![Job Matches](screenshots/match.png)
+![Job Matches](Screenshots/match.png)
 
 ## Recruiter Dashboard
 
-![Recruiter Dashboard](screenshots/rec_dashboard.png)
+![Recruiter Dashboard](Screenshots/rec_dashboard.png)
 
 ## Create Job
 
-![Create Job](screenshots/jobcreate.png)
+![Create Job](Screenshots/jobcreate.png)
 
 ## Applicant Ranking
 
-![Applicant Ranking](screenshots/acept.png)
+![Applicant Ranking](Screenshots/acept.png)
 
 
 ---
