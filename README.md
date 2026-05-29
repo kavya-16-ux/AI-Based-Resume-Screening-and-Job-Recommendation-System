@@ -213,11 +213,24 @@ python manage.py runserver
 
 # 🧠 Algorithms Used
 
-## Sentence-BERT
+## Sentence-BERT (SBERT)
 
-* Converts text into vector embeddings
-* Understands semantic meaning
-* Used for resume matching and interview scoring
+* Sentence-BERT is a transformer-based NLP model built on top of BERT.
+* It converts resumes and job descriptions into dense semantic vector embeddings.
+* Unlike TF-IDF, Sentence-BERT understands contextual meaning and semantic similarity.
+* Example:
+* “ML Engineer” and “Machine Learning Engineer” are understood as similar meanings.
+* The generated embeddings are compared using Cosine Similarity to calculate the final match score.
+* This improves recommendation accuracy and candidate ranking quality.
+
+## Why I Used Sentence-BERT Instead of TF-IDF
+
+* TF-IDF only performs keyword matching.
+* It cannot understand semantic meaning or context.
+* Sentence-BERT generates contextual embeddings that capture the meaning of entire sentences.
+* This improves matching accuracy even when different words express similar skills.
+* It provides more intelligent resume-job matching compared to traditional NLP methods.
+
 
 ## Cosine Similarity
 
